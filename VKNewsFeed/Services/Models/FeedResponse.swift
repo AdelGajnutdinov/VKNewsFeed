@@ -19,8 +19,17 @@ struct FeedResponse: Decodable {
 }
 
 struct FeedItem: Decodable {
-    let sourceId: Int
-    let postId: Int
+    // only feed
+    var postId: Int?
+    let sourceId: Int?
+    
+    // only search
+    let id: Int?
+    let ownerId: Int?
+    
+    // all
+    var postUid: Int { return postId ?? id! }
+    var sourceUid: Int { return sourceId ?? ownerId! }
     let text: String?
     let date: Double
     let comments: CountableItem?
@@ -74,8 +83,8 @@ struct Profile: ProfileRepresentable {
     let lastName: String
     let photo100: String
     
-    var name: String { return firstName + " " + lastName}
-    var photo: String { return photo100}
+    var name: String { return firstName + " " + lastName }
+    var photo: String { return photo100 }
 }
 
 struct Group: ProfileRepresentable {
@@ -83,5 +92,5 @@ struct Group: ProfileRepresentable {
     let name: String
     let photo100: String
     
-    var photo: String { return photo100}
+    var photo: String { return photo100 }
 }

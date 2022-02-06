@@ -81,6 +81,9 @@ class NewsfeedViewController: UIViewController, NewsfeedDisplayLogic, NewsfeedCo
         self.navigationController?.hidesBarsOnSwipe = true
         self.navigationController?.navigationBar.backgroundColor = .white
         self.navigationItem.titleView = titleView
+        
+        titleView.delegate = self
+        titleView.setInsertableTextFieldTextEditedActionDelay(delayInSeconds: 0.7)
     }
     
     @objc private func refreshData() {
@@ -137,5 +140,19 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
     // helps when "Show more..." button pressed
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return feedViewModel.cells[indexPath.row].sizes.totalHeight
+    }
+}
+
+extension NewsfeedViewController: TitleViewDelegate {
+    func searchFieldTextChanged(with text: String?) {
+        guard let text = text else { return }
+        
+        if !text.isEmpty {
+            self.interactor?.makeRequest(request: .searchNewsfeed(query: text))
+        } else {
+            self.interactor?.makeRequest(request: .getNewsfeed)
+        }
+        
+        self.titleView.endEditing(true)
     }
 }

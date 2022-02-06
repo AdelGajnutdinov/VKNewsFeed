@@ -12,9 +12,15 @@ protocol TitleViewViewModel {
     var photoUrlString: String? { get }
 }
 
+protocol TitleViewDelegate: AnyObject {
+    func searchFieldTextChanged(with text: String?)
+}
+
 class TitleView: UIView {
     
-    private var searchField = InsertableTextField()
+    weak var delegate: TitleViewDelegate?
+    
+    private var searchField: (UITextField & DelayableTextField)!
     
     private var avatar: WebImageView = {
         let imageView = WebImageView()
@@ -26,6 +32,11 @@ class TitleView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        searchField = InsertableTextField()
+        searchField.actionClosure = { [unowned self] text in
+            self.delegate?.searchFieldTextChanged(with: text)
+        }
         
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(searchField)
@@ -63,6 +74,10 @@ class TitleView: UIView {
         super.layoutSubviews()
         avatar.layer.masksToBounds = true
         avatar.layer.cornerRadius = avatar.frame.width / 2
+    }
+    
+    func setInsertableTextFieldTextEditedActionDelay(delayInSeconds: Double) {
+        searchField.actionDelay = delayInSeconds
     }
     
     required init?(coder: NSCoder) {

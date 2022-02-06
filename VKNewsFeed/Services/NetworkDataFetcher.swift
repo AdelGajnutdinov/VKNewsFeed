@@ -10,7 +10,7 @@ import Foundation
 protocol DataFetcher {
     func getFeed(nextBatchFrom: String?, response: @escaping (FeedResponse?) -> Void)
     func getUser(response: @escaping (UserResponse?) -> Void)
-    func searchFeed(by query: String, response: @escaping (FeedResponse?) -> Void)
+    func searchFeed(by query: String, nextBatchFrom: String?, response: @escaping (FeedResponse?) -> Void)
 }
 
 struct NetworkDataFetcher: DataFetcher {
@@ -49,10 +49,11 @@ struct NetworkDataFetcher: DataFetcher {
         }
     }
     
-    func searchFeed(by query: String, response: @escaping (FeedResponse?) -> Void) {
+    func searchFeed(by query: String, nextBatchFrom: String?, response: @escaping (FeedResponse?) -> Void) {
         var params = ["q" : query]
+        params["count"] = "50"
         params["extended"] = "1"
-//        params["start_from"] = nextBatchFrom
+        params["start_from"] = nextBatchFrom
         networking.request(path: API.newsFeedSearch, with: params) { data, error in
             if let error = error {
                 print("Error received requesting data:", error.localizedDescription)
@@ -66,7 +67,25 @@ struct NetworkDataFetcher: DataFetcher {
     private func decodeJSON<T: Decodable> (type: T.Type, from data: Data?) -> T? {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        guard let data = data, let response = try? decoder.decode(type.self, from: data) else { return nil }
-        return response
+        guard let data = data else { return nil }
+        
+        do {
+            let response = try decoder.decode(type.self, from: data)
+            return response
+        } catch let DecodingError.dataCorrupted(context) {
+            print(context)
+        } catch let DecodingError.keyNotFound(key, context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let DecodingError.valueNotFound(value, context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let DecodingError.typeMismatch(type, context)  {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch {
+            print("error: ", error)
+        }
+        return nil
     }
 }

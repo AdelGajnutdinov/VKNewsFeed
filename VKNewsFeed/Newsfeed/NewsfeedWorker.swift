@@ -17,6 +17,7 @@ class NewsfeedService {
     private var revealedPostIds = [Int]()
     private var feedResponse: FeedResponse?
     private var newFromInProcess: String?
+    private var queryInProcess: String?
     
     init() {
         self.authService = SceneDelegate.shared().authService
@@ -31,6 +32,7 @@ class NewsfeedService {
     }
     
     func getFeed(completion: @escaping (FeedResponse, [Int]) -> Void) {
+        queryInProcess = nil
         fetcher.getFeed(nextBatchFrom: nil) { [weak self] feedResponse in
             self?.feedResponse = feedResponse
             guard let feedResponse = self?.feedResponse else { return }
@@ -46,7 +48,7 @@ class NewsfeedService {
     
     func getNextBatch(completion: @escaping (FeedResponse, [Int]) -> Void) {
         newFromInProcess = feedResponse?.nextFrom
-        fetcher.getFeed(nextBatchFrom: newFromInProcess) { [weak self] newFeedResponse in
+        let responseHandler: ((FeedResponse?) -> Void) = { [weak self] newFeedResponse in
             guard let newFeedResponse = newFeedResponse else { return }
             guard self?.feedResponse?.nextFrom != newFeedResponse.nextFrom else { return }
             
@@ -78,11 +80,18 @@ class NewsfeedService {
             guard let feedResponse = self?.feedResponse else { return }
             completion(feedResponse, self!.revealedPostIds)
         }
+        
+        if let queryInProcess = queryInProcess {
+            fetcher.searchFeed(by: queryInProcess, nextBatchFrom: newFromInProcess, response: responseHandler)
+        } else {
+            fetcher.getFeed(nextBatchFrom: newFromInProcess, response: responseHandler)
+        }
     }
     
     func searchFeed(by query: String, completion: @escaping (FeedResponse, [Int]) -> Void) {
-        fetcher.searchFeed(by: query) { [weak self] feedResponse in
+        fetcher.searchFeed(by: query, nextBatchFrom: nil) { [weak self] feedResponse in
             self?.feedResponse = feedResponse
+            self?.queryInProcess = query
             guard let feedResponse = self?.feedResponse else { return }
             completion(feedResponse, self!.revealedPostIds)
         }

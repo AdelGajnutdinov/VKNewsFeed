@@ -40,13 +40,13 @@ class NewsfeedPresenter: NewsfeedPresentationLogic {
     }
     
     private func cellViewModel(from feedItem: FeedItem, profiles: [Profile], groups: [Group], revealedPostIds: [Int]) -> FeedViewModel.Cell {
-        let profile = profile(for: feedItem.sourceId, profiles: profiles, groups: groups)
+        let profile = profile(for: feedItem.sourceUid, profiles: profiles, groups: groups)
         let date = Date(timeIntervalSince1970: feedItem.date)
         let photoAttachments = photoAttachments(feedItem: feedItem)
-        let isFullSized = revealedPostIds.contains(feedItem.postId)
+        let isFullSized = revealedPostIds.contains(feedItem.postUid)
         let sizes = cellLayoutCalculator.sizes(postText: feedItem.text, photoAttachments: photoAttachments, isFullSizedPost: isFullSized)
         let postText = feedItem.text?.replacingOccurrences(of: "<br>", with: "\n")
-        return FeedViewModel.Cell.init(postId: feedItem.postId,
+        return FeedViewModel.Cell.init(postId: feedItem.postUid,
                                        iconUrlString: profile.photo,
                                        name: profile.name,
                                        date: dateFormatter.string(from: date),

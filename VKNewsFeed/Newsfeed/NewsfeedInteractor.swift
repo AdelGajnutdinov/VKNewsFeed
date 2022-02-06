@@ -42,7 +42,7 @@ class NewsfeedInteractor: NewsfeedBusinessLogic {
             }
         case .searchNewsfeed(query: let query):
             service?.searchFeed(by: query, completion: { [weak self] feedResponse, revealedPostIds in
-//                self?.presenter?.presentData(response: .presentNewsfeed(feed: feedResponse, revealedPostIds: revealedPostIds))
+                self?.presenter?.presentData(response: .presentNewsfeed(feed: feedResponse, revealedPostIds: revealedPostIds))
             })
         }
     }

@@ -8,7 +8,17 @@
 import Foundation
 import UIKit
 
-class InsertableTextField: UITextField {
+protocol DelayableTextField {
+    var actionDelay: Double { get set }
+    var actionClosure: ((_ text: String?) -> Void)? { get set }
+}
+
+class InsertableTextField: UITextField, DelayableTextField {
+    
+    var actionDelay: Double = 1.0
+    var actionClosure: ((_ text: String?) -> Void)?
+    
+    private var timer: Timer?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +36,9 @@ class InsertableTextField: UITextField {
         leftView = UIImageView(image: image)
         leftView?.frame = CGRect(x: 0, y: 0, width: 14, height: 14)
         leftViewMode = .always
+        
+        self.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        self.returnKeyType = .search
     }
     
     required init?(coder: NSCoder) {
@@ -48,5 +61,22 @@ class InsertableTextField: UITextField {
     
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: 36, dy: 0)
+    }
+    
+    @objc func textFieldEditingChanged() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: actionDelay, target: self, selector: #selector(executeAction), userInfo: nil, repeats: false)
+    }
+
+    @objc private func executeAction() {
+        actionClosure?(self.text)
+    }
+}
+
+extension InsertableTextField: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.timer?.invalidate()
+        self.executeAction()
+        return true
     }
 }
