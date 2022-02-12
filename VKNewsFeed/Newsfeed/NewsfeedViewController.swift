@@ -27,6 +27,8 @@ class NewsfeedViewController: UIViewController, NewsfeedDisplayLogic, NewsfeedCo
     }()
     
     private var feedViewModel = FeedViewModel.init(cells: [], footerTitle: nil)
+    private var searchText: String?
+    private(set) var selectedPhoto: FeedCellPhotoAttachmentViewModel?
     
     // MARK: Setup
     private func setup() {
@@ -41,10 +43,6 @@ class NewsfeedViewController: UIViewController, NewsfeedDisplayLogic, NewsfeedCo
         router.viewController     = viewController
     }
     
-    // MARK: Routing
-    
-    
-    
     // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +54,7 @@ class NewsfeedViewController: UIViewController, NewsfeedDisplayLogic, NewsfeedCo
     }
     
     private func setupTableView() {
-        tableView.register(UINib(nibName: "NewsfeedCell", bundle: nil), forCellReuseIdentifier: NewsfeedCell.reuseId)
+//        tableView.register(UINib(nibName: "NewsfeedCell", bundle: nil), forCellReuseIdentifier: NewsfeedCell.reuseId)
         tableView.register(NewsfeedCodeCell.self, forCellReuseIdentifier: NewsfeedCodeCell.reuseId)
         
         tableView.contentInset.top = 8
@@ -87,7 +85,11 @@ class NewsfeedViewController: UIViewController, NewsfeedDisplayLogic, NewsfeedCo
     }
     
     @objc private func refreshData() {
-        interactor?.makeRequest(request: .getNewsfeed)
+        if let searchText = searchText, !searchText.isEmpty {
+            interactor?.makeRequest(request: .searchNewsfeed(query: searchText))
+        } else {
+            interactor?.makeRequest(request: .getNewsfeed)
+        }
     }
     
     func displayData(viewModel: Newsfeed.Model.ViewModel.ViewModelData) {
@@ -117,6 +119,21 @@ class NewsfeedViewController: UIViewController, NewsfeedDisplayLogic, NewsfeedCo
         
         interactor?.makeRequest(request: .revealPost(postId: cellViewModel.postId))
     }
+    
+    func didSelectPhoto(photo: FeedCellPhotoAttachmentViewModel) {
+        selectedPhoto = photo
+        performSegue(withIdentifier: "ShowPhoto", sender: nil)
+    }
+    
+    // MARK: Routing
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let scene = segue.identifier {
+            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
+            if let router = router, router.responds(to: selector) {
+                router.perform(selector, with: segue)
+            }
+        }
+    }
 }
 
 extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -145,14 +162,11 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension NewsfeedViewController: TitleViewDelegate {
     func searchFieldTextChanged(with text: String?) {
-        guard let text = text else { return }
-        
-        if !text.isEmpty {
-            self.interactor?.makeRequest(request: .searchNewsfeed(query: text))
+        self.searchText = text
+        if let searchText = searchText, !searchText.isEmpty {
+            self.interactor?.makeRequest(request: .searchNewsfeed(query: searchText))
         } else {
             self.interactor?.makeRequest(request: .getNewsfeed)
         }
-        
-        self.titleView.endEditing(true)
     }
 }

@@ -38,6 +38,7 @@ class InsertableTextField: UITextField, DelayableTextField {
         leftViewMode = .always
         
         self.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        self.delegate = self
         self.returnKeyType = .search
     }
     
@@ -76,6 +77,7 @@ class InsertableTextField: UITextField, DelayableTextField {
 extension InsertableTextField: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.timer?.invalidate()
+        self.resignFirstResponder()
         self.executeAction()
         return true
     }

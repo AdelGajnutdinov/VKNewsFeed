@@ -8,14 +8,17 @@
 
 import UIKit
 
-protocol NewsfeedRoutingLogic {
-
+@objc protocol NewsfeedRoutingLogic {
+    func routeToShowPhoto(segue: UIStoryboardSegue)
 }
 
 class NewsfeedRouter: NSObject, NewsfeedRoutingLogic {
-
-  weak var viewController: NewsfeedViewController?
-  
-  // MARK: Routing
-  
+    
+    weak var viewController: NewsfeedViewController?
+    
+    // MARK: Routing
+    func routeToShowPhoto(segue: UIStoryboardSegue) {
+        let destinationVC = segue.destination as! PhotoViewController
+        destinationVC.photo = viewController?.selectedPhoto
+    }
 }

@@ -45,13 +45,19 @@ struct Attachment: Decodable {
 
 struct Photo: Decodable {
     let sizes: [PhotoSize]
+    
     var photoPreview: PhotoSize {
-        return getPhotoPreview()
+        return getPhotoSize(inHD: false)
+    }
+    var originalPhoto: PhotoSize {
+        return getPhotoSize(inHD: true)
     }
     
-    private func getPhotoPreview() -> PhotoSize {
-        if let sizeX = sizes.first(where: { $0.type == "x" }) {
+    private func getPhotoSize(inHD: Bool) -> PhotoSize {
+        if !inHD, let sizeX = sizes.first(where: { $0.type == "x" }) {
             return sizeX
+        } else if inHD, let sizeW = sizes.first(where: { $0.type == "w" }) {
+            return sizeW
         } else if let fallBackSize = sizes.last {
             return fallBackSize
         } else {

@@ -10,13 +10,20 @@ import UIKit
 
 protocol NewsfeedCodeCellDelegate: AnyObject {
     func revealPost(for cell: NewsfeedCodeCell)
+    func didSelectPhoto(photo: FeedCellPhotoAttachmentViewModel)
 }
 
 class NewsfeedCodeCell: UITableViewCell {
     
     static let reuseId = "NewsfeedCodeCell"
     
-    weak var delegate: NewsfeedCodeCellDelegate?
+    weak var delegate: NewsfeedCodeCellDelegate? {
+        didSet {
+            galleryCollectionView.galleryDelegate = delegate
+        }
+    }
+    
+    var viewModel: FeedCellViewModel?
     
     // root layer
     let cardView: UIView = {
@@ -57,10 +64,7 @@ class NewsfeedCodeCell: UITableViewCell {
         return button
     }()
     let galleryCollectionView = GalleryCollectionView()
-    let postImageView: WebImageView = {
-        let webImageView = WebImageView()
-        return webImageView
-    }()
+    let postImageView = WebImageView()
     let bottomView = UIView()
     
     // layers on topView
@@ -183,44 +187,30 @@ class NewsfeedCodeCell: UITableViewCell {
         moreTextButton.isUserInteractionEnabled = true
         moreTextButton.isEnabled = true
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(postImageViewTapped))
+        postImageView.isUserInteractionEnabled = true
+        postImageView.addGestureRecognizer(tapGestureRecognizer)
+        
         overlayFirstLayer()
         overlaySecondLayer()
         overlayThirdLayerOnTopView()
         overlayThirdLayerOnBottomView()
         overlayFourthLayerOnBottomViewSubviews()
-        
-        // inner view with margins
-        //        cardView.topAnchor.constraint(equalTo: self.topAnchor, constant: 12).isActive = true
-        //        cardView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -12).isActive = true
-        //        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12).isActive = true
-        //        cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12).isActive = true
-        
-        // inner view as top-left rectangle
-        //        cardView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
-        //        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
-        //        cardView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        //        cardView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        // inner view in the middle
-        //        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12).isActive = true
-        //        cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12).isActive = true
-        //        cardView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        //        cardView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        // inner view in the top half
-        //        cardView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        //        cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        //        cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        //        cardView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 1/2).isActive = true
-        
+    }
+
+    @objc func postImageViewTapped() {
+        if let photo = viewModel?.photoAttachments.first {
+            delegate?.didSelectPhoto(photo: photo)
+        }
     }
     
     @objc func moreTextButtonTapped() {
-        print("11")
         delegate?.revealPost(for: self)
     }
     
     func set(viewModel: FeedCellViewModel) {
+        self.viewModel = viewModel
+        
         iconImageView.set(imageURL: viewModel.iconUrlString)
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date

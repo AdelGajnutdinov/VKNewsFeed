@@ -33,6 +33,10 @@ protocol FeedCellPhotoAttachmentViewModel {
     var photoUrlString: String? { get }
     var height: Int { get }
     var width: Int { get }
+    
+    var originalPhotoUrlString: String? { get }
+    var originalHeight: Int { get }
+    var originalWidth: Int { get }
 }
 
 class NewsfeedCell: UITableViewCell {

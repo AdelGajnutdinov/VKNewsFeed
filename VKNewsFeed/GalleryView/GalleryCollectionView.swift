@@ -11,6 +11,7 @@ import UIKit
 class GalleryCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     var photos = [FeedCellPhotoAttachmentViewModel]()
+    var galleryDelegate: NewsfeedCodeCellDelegate?
     
     init() {
         let rowLayout = RowLayout()
@@ -45,6 +46,10 @@ class GalleryCollectionView: UICollectionView, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: frame.width, height: frame.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        galleryDelegate?.didSelectPhoto(photo: photos[indexPath.row])
     }
     
     required init?(coder: NSCoder) {

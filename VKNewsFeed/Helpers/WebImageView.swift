@@ -7,8 +7,19 @@
 
 import UIKit
 
+protocol WebImageViewDelegate {
+    func webImageDidLoad()
+}
+
 class WebImageView: UIImageView {
     private var currentUrlString: String?
+    var delegate: WebImageViewDelegate?
+    
+    override var image: UIImage? {
+        didSet {
+            delegate?.webImageDidLoad()
+        }
+    }
     
     func set(imageURL: String?) {
         self.currentUrlString = imageURL

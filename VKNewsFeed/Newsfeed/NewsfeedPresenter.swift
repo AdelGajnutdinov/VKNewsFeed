@@ -79,23 +79,17 @@ class NewsfeedPresenter: NewsfeedPresentationLogic {
         return profile!
     }
     
-    private func photoAttachment(feedItem: FeedItem) -> FeedViewModel.FeedCellPhotoAttachment? {
-        guard let photos = feedItem.attachments?.compactMap({ attachment in
-            attachment.photo
-        }), let firstPhotoPreview = photos.first?.photoPreview else { return nil }
-        let photoViewModel = FeedViewModel.FeedCellPhotoAttachment.init(photoUrlString: firstPhotoPreview.url,
-                                                          height: firstPhotoPreview.height,
-                                                          width: firstPhotoPreview.width)
-        return photoViewModel
-    }
-    
     private func photoAttachments(feedItem: FeedItem) -> [FeedViewModel.FeedCellPhotoAttachment] {
         guard let attachments = feedItem.attachments else { return [] }
         return attachments.compactMap { attachment in
             guard let photoPreview = attachment.photo?.photoPreview else { return nil }
+            guard let originalPhoto = attachment.photo?.originalPhoto else { return nil }
             return FeedViewModel.FeedCellPhotoAttachment.init(photoUrlString: photoPreview.url,
                                                               height: photoPreview.height,
-                                                              width: photoPreview.width)
+                                                              width: photoPreview.width,
+                                                              originalPhotoUrlString: originalPhoto.url,
+                                                              originalHeight: originalPhoto.height,
+                                                              originalWidth: originalPhoto.width)
         }
     }
 }

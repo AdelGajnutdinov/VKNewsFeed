@@ -51,11 +51,42 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="7ss-OL-Fv4" id="cUS-ON-PM9"/>
+                        <segue destination="sKX-Fp-LBH" kind="showDetail" identifier="ShowPhoto" id="mby-Fv-UMP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="111.59420289855073" y="93.75"/>
+        </scene>
+        <!--Photo View Controller-->
+        <scene sceneID="H75-TT-7aX">
+            <objects>
+                <viewController id="sKX-Fp-LBH" customClass="PhotoViewController" customModule="VKNewsFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="m6h-nG-cwc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g1o-ZN-Fcc" customClass="ZoomableImageView" customModule="VKNewsFeed" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="nfF-5h-xmi"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="g1o-ZN-Fcc" firstAttribute="top" secondItem="nfF-5h-xmi" secondAttribute="top" id="2JV-GV-jZY"/>
+                            <constraint firstItem="g1o-ZN-Fcc" firstAttribute="leading" secondItem="nfF-5h-xmi" secondAttribute="leading" id="5Y8-9f-qG9"/>
+                            <constraint firstItem="g1o-ZN-Fcc" firstAttribute="bottom" secondItem="nfF-5h-xmi" secondAttribute="bottom" id="KdF-MF-Yfl"/>
+                            <constraint firstItem="g1o-ZN-Fcc" firstAttribute="trailing" secondItem="nfF-5h-xmi" secondAttribute="trailing" id="XiV-6C-mW9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="g1o-ZN-Fcc" id="aFF-7j-3Pf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="73S-GF-Fvz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1007" y="94"/>
         </scene>
     </scenes>
     <resources>

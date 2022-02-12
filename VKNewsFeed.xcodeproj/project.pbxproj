@@ -36,6 +36,8 @@
 		F5B6C430277A10960069210B /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B6C42F277A10960069210B /* Constraints.swift */; };
 		F5B6C432277A1B170069210B /* Color + Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B6C431277A1B170069210B /* Color + Hex.swift */; };
 		F5B6C434277A21620069210B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B6C433277A21620069210B /* Constants.swift */; };
+		F5B92B4127AFDA8300FAAA9E /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B92B3A27AFDA8300FAAA9E /* PhotoViewController.swift */; };
+		F5B92B8727AFEDF600FAAA9E /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B92B8627AFEDF600FAAA9E /* ZoomableImageView.swift */; };
 		F5C5A3D6278EE75C00D1E158 /* GalleryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C5A3D5278EE75C00D1E158 /* GalleryCollectionView.swift */; };
 		F5C5A3D8278EE82100D1E158 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C5A3D7278EE82100D1E158 /* GalleryCollectionViewCell.swift */; };
 		F5C5A3DA278F000A00D1E158 /* RowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C5A3D9278F000A00D1E158 /* RowLayout.swift */; };
@@ -92,6 +94,8 @@
 		F5B6C42F277A10960069210B /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		F5B6C431277A1B170069210B /* Color + Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color + Hex.swift"; sourceTree = "<group>"; };
 		F5B6C433277A21620069210B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F5B92B3A27AFDA8300FAAA9E /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		F5B92B8627AFEDF600FAAA9E /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		F5C5A3D5278EE75C00D1E158 /* GalleryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionView.swift; sourceTree = "<group>"; };
 		F5C5A3D7278EE82100D1E158 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		F5C5A3D9278F000A00D1E158 /* RowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowLayout.swift; sourceTree = "<group>"; };
@@ -194,6 +198,7 @@
 				F5C5A3E227934A0E00D1E158 /* FooterView */,
 				F5C5A3DB278F634500D1E158 /* TitleView */,
 				F550E889276E1DB600FF53A8 /* Cell */,
+				F5B92B3527AFD9E600FAAA9E /* Photo */,
 				F550E887276E18EC00FF53A8 /* NewsfeedViewController.storyboard */,
 				F550E87D276E151200FF53A8 /* NewsfeedViewController.swift */,
 				F550E87E276E151200FF53A8 /* NewsfeedInteractor.swift */,
@@ -220,6 +225,7 @@
 		F57671242770DC0F00B53EF2 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				F5B92B8627AFEDF600FAAA9E /* ZoomableImageView.swift */,
 				F5B6C4252770DD970069210B /* WebImageView.swift */,
 				F5B6C4292777C62A0069210B /* String + Height.swift */,
 				F5B6C42F277A10960069210B /* Constraints.swift */,
@@ -227,6 +233,14 @@
 				F5C5A3E7279361DA00D1E158 /* GradientView.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		F5B92B3527AFD9E600FAAA9E /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				F5B92B3A27AFDA8300FAAA9E /* PhotoViewController.swift */,
+			);
+			path = Photo;
 			sourceTree = "<group>";
 		};
 		F5C5A3D4278EE73F00D1E158 /* GalleryView */ = {
@@ -338,6 +352,7 @@
 				F5C5A3D6278EE75C00D1E158 /* GalleryCollectionView.swift in Sources */,
 				F5B6C42A2777C62A0069210B /* String + Height.swift in Sources */,
 				F5B6C432277A1B170069210B /* Color + Hex.swift in Sources */,
+				F5B92B8727AFEDF600FAAA9E /* ZoomableImageView.swift in Sources */,
 				F550E884276E151200FF53A8 /* NewsfeedViewController.swift in Sources */,
 				F550E8502766495400FF53A8 /* AuthViewController.swift in Sources */,
 				F550E84C2766495400FF53A8 /* AppDelegate.swift in Sources */,
@@ -356,6 +371,7 @@
 				F5B6C4262770DD970069210B /* WebImageView.swift in Sources */,
 				F550E877276E0D2300FF53A8 /* NetworkDataFetcher.swift in Sources */,
 				F550E881276E151200FF53A8 /* NewsfeedWorker.swift in Sources */,
+				F5B92B4127AFDA8300FAAA9E /* PhotoViewController.swift in Sources */,
 				F5C5A3E427934A1C00D1E158 /* FooterView.swift in Sources */,
 				F550E86527665BA000FF53A8 /* AuthService.swift in Sources */,
 				F550E8722766906A00FF53A8 /* API.swift in Sources */,
